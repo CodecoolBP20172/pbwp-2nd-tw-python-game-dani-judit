@@ -1,27 +1,13 @@
-print()
+import random
 print("Welcome on board! This is a TicTacToe game designed by Kovács Judit & Koperecz Dániel.\n Have a good game!")
-print("Player 1 will be 'X' and Player 2 will be 'O'.")
-print("You can mark the blocks with numbers between 1 and 9.")
-print("The first block is in the left top-corner, the nineth is in the right bottom-corner.")
+print("Player 1 will be 'X' and the Computer be 'O'.")
+print("The left side top corner is the 1th place, and the right side bottom corner is the 9th.")
+print("You can mark the fields with numbers between 1 and 9!")
 name = input("Give me your name Player 1: ")
-name2 = input("Give me your name Player 2: ")
-boardsize = input("Choose the size of the board: press 3 if you want to use the standard size, 4 to a bigger, and 5 to a large board: ")
-
-def printTable():
-    if boardsize == '3':
-        drawboard()
-    elif boardsize == '4':
-        drawboard2()
-    elif boardsize == '5':
-        drawboard3()
-    else:
-
 
 
 while (True):
     board = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']
-    board2 = [' '] * 17
-    board3 = [' '] * 26
     player = 1
 
     win = 1
@@ -29,17 +15,19 @@ while (True):
     running = 0
 
     mark = 'X'
+
     game = running
 
-def drawboard2():
-    print(board[1] + "  |" + board[2] + "  |" + board[3] + "   |")
-        print("___|___|___|___")
-        print(board[5] + "  |" + board[6] + "  |" + board[7])
-        print("___|___|___|___")
-        print(board[9] + "  |" + board[10] + "  |" + board[11])
-        print("   |   |   ")
-
-
+    def compmove():
+        global lista
+        lista = []
+        for i in range(len(board)):
+            if i == 0:
+                continue
+            if board[i] == ' ':
+                lista.append(i)
+                global computer
+                computer = random.choice(lista)
 
     def drawboard():
         print(board[1] + "  |" + board[2] + "  |" + board[3])
@@ -48,14 +36,6 @@ def drawboard2():
         print("___|___|___")
         print(board[7] + "  |" + board[8] + "  |" + board[9])
         print("   |   |   ")
-
-    def checkposition(x):
-        if board[x] == ' ':
-            return True
-        else:
-            print()
-            print("Choose another block: ")
-            return False
 
     def checkWin():
         global game
@@ -80,25 +60,30 @@ def drawboard2():
         else:
             game = running
 
+
     while (game == running):
         print()
-        printTable()
+        drawboard()
         if(player % 2 != 0):
             print("It's your turn " + name + ' !')
             mark = 'X'
+            while True:
+                Choice = input("Choose a number between 1-9 to mark somewhere: ")
+                try:
+                    Choice = int(Choice)
+                    break
+                except (ValueError):
+                    print("Please enter a number between 1-9: ")
+            if board[Choice] == ' ':
+                board[Choice] = mark
+                player += 1
+                checkWin()
+            else:
+                print("That place is already taken, please choose another!")
         else:
-            print("It's your turn " + name2 + ' !')
+            compmove()
             mark = 'O'
-        while True:
-            Choice = (input("Choose a number between 1-25 to mark somewhere: "))
-            try:
-                Choice = int(Choice)
-                break
-            except ValueError:
-                print("Please enter a valid number: ")
-
-        if checkposition(Choice):
-            board[Choice] = mark
+            board[computer] = mark
             player += 1
             checkWin()
 
@@ -111,12 +96,8 @@ def drawboard2():
             if(player % 2 != 0):
                 print(name + " won!")
             else:
-                print(name2 + " won!")
+                print(name + " lost!")
 
             playAgain = input("Would you like to play again? Press y if yes: ")
             if playAgain != 'y':
                 quit()
-            else:
-                namechange = name
-                name = name2
-                name2 = namechange
